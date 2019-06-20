@@ -9,7 +9,7 @@ end
 
 def writeElement(element,depth)
     json = ""
-    if element.is_a?(Hash)
+    if element.is_a?(Hash) # Hash
         json += "{\n"
         keys = element.keys
         (0...keys.size).each do |i|
@@ -26,7 +26,21 @@ def writeElement(element,depth)
         end
         json += indent(depth) + "}"
     end
-    if element.is_a?(String)
+
+    if element.is_a?(Array) # Array
+        json += "[\n"
+        (0...element.size).each do |i|
+            json += indent(depth+1)
+            json += writeElement(element[i],depth+1)
+            if i != element.size-1
+                json += ","
+            end
+            json += "\n"
+        end
+        json += indent(depth) + "]"
+    end
+
+    if element.is_a?(String) # String
         json += "\"#{element}\""
     end
     return json
