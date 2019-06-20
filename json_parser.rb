@@ -43,6 +43,16 @@ def writeElement(element,depth)
     if element.is_a?(String) # String
         json += "\"#{element}\""
     end
+
+    if element.is_a?(Integer) || element.is_a?(TrueClass) || 
+            element.is_a?(FalseClass) # Integer, Boolean
+        json += "#{element}"
+    end
+    
+    if element.is_a?(NilClass) # Nil
+        json += "null"
+    end
+
     return json
 end
 
