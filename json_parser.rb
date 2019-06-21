@@ -69,14 +69,14 @@ class Tockenizer
 
     def next()
         if @index >= @size
-            return nil
+            raise "Expect more but got end of input"
         end
         return @tockens[@index]
     end
 
     def pop()
         if @index >= @size
-            return nil
+            raise "Expect more but got end of input"
         end
         @index += 1
         return @tockens[@index-1]
@@ -97,8 +97,8 @@ end
 
 def parse(tok)
 
-    if tok.next() == "{" # Parse Hash
-        tok.pop()
+    char = tok.pop()
+    if char == "{" # Parse Hash
         element = {}
         more_keys = true
         while more_keys
@@ -121,8 +121,7 @@ def parse(tok)
         return element
     end
 
-    if tok.next == "\"" # Parse String
-        tok.pop()
+    if char == "\"" # Parse String
         element = ""
         while tok.next != "\""
             element += tok.pop()
@@ -131,6 +130,19 @@ def parse(tok)
         return element
     end
 
+    if char.match(/[\.\d]/) # Parse number
+        num_str = char
+        next_tok = tok.next()
+        while next_tok.match(/[\.\d]/)
+            num_str += tok.pop()
+            next_tok = tok.next()
+        end
+        if num_str.match(/\./)
+            return num_str.to_f
+        else
+            return num_str.to_i
+        end
+    end
     raise "No match found for parsing"
 end
 

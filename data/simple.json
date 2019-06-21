@@ -1,4 +1,7 @@
 { 
-    "key1": "value1",
-    "key2": "value2"
+    "key1": {
+                "innerkey_1": "val3"
+            },
+    "key2": 2,
+    "key3": 3.2
 }
