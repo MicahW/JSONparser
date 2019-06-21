@@ -69,14 +69,14 @@ class Tockenizer
 
     def next()
         if @index >= @size
-            return Nil
+            return nil
         end
         return @tockens[@index]
     end
 
     def pop()
         if @index >= @size
-            return Nil
+            return nil
         end
         @index += 1
         return @tockens[@index-1]
@@ -90,11 +90,49 @@ class Tockenizer
         if @tockens[@index] != char
             raise "Expected #{char} but got #{@tockens[@index]}"
         end
+        return pop()
     end
 end
 
 
+def parse(tok)
 
+    if tok.next() == "{" # Parse Hash
+        tok.pop()
+        element = {}
+        more_keys = true
+        while more_keys
+            tok.expect("\"")
+            key = ""
+            while tok.next != "\""
+                key += tok.pop()
+            end
+            tok.pop()
+            tok.expect(":")
+            value = parse(tok)
+            element[key] = value
+            if tok.next() != ","
+                more_keys = false
+            else
+                tok.pop()
+            end
+        end
+        tok.expect("}")
+        return element
+    end
+
+    if tok.next == "\"" # Parse String
+        tok.pop()
+        element = ""
+        while tok.next != "\""
+            element += tok.pop()
+        end
+        tok.pop()
+        return element
+    end
+
+    raise "No match found for parsing"
+end
 
 
 
@@ -104,4 +142,9 @@ def toJSON(object)
         raise "The object passed here must be of type hash"
     end
     json = writeElement(object,0) + "\n"
+end
+
+def fromJSON(str)
+    tok = Tockenizer.new(str)
+    return parse(tok)
 end
