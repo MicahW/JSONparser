@@ -124,6 +124,21 @@ def parse(tok)
         return element
     end
 
+    if char == "[" # Parse Array
+        element = []
+        more_elements = true
+        while more_elements
+            element.push(parse(tok))
+            if tok.next() != ","
+                more_elements = false
+            else
+                tok.pop()
+            end
+        end
+        tok.expect("]")
+        return element
+    end
+
     if char == "\"" # Parse String
         element = ""
         while tok.next != "\""

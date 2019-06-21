@@ -1,10 +1,18 @@
 { 
-    "key1": {
-                "innerkey_1": "val3"
-            },
-    "key2": 2,
-    "key3": 3.2,
-    "key4": true,
-    "key5": false,
-    "key6": null
+    "key1": [
+        1,
+        2,
+        false,
+        null,
+        "scapperd"
+    ],
+    "key2": [
+        1,
+        2,
+        false,
+        null,
+        "scapperd"
+    ]
 }
+
+        
