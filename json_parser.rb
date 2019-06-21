@@ -96,8 +96,8 @@ end
 
 
 def parse(tok)
-
     char = tok.pop()
+
     if char == "{" # Parse Hash
         element = {}
         more_keys = true
@@ -106,6 +106,9 @@ def parse(tok)
             key = ""
             while tok.next != "\""
                 key += tok.pop()
+            end
+            if element.key?(key)
+                raise "duplicate key: #{key}"
             end
             tok.pop()
             tok.expect(":")
@@ -143,6 +146,29 @@ def parse(tok)
             return num_str.to_i
         end
     end
+
+    if char == "t" # True
+        tok.expect("r")
+        tok.expect("u")
+        tok.expect("e")
+        return true
+    end
+
+    if char == "f" # False
+        tok.expect("a")
+        tok.expect("l")
+        tok.expect("s")
+        tok.expect("e")
+        return false
+    end
+
+    if char == "n" # Null
+        tok.expect("u")
+        tok.expect("l")
+        tok.expect("l")
+        return nil
+    end
+
     raise "No match found for parsing"
 end
 
