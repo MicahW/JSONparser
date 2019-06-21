@@ -56,8 +56,46 @@ def writeElement(element,depth)
     return json
 end
 
+class Tockenizer
 
-    
+    def initialize(str)
+        @tockens = str.split("")
+        @tockens.delete(" ")
+        @tockens.delete("\n")
+        @tockens.delete("\t")
+        @size = @tockens.size()
+        @index = 0
+    end
+
+    def next()
+        if @index >= @size
+            return Nil
+        end
+        return @tockens[@index]
+    end
+
+    def pop()
+        if @index >= @size
+            return Nil
+        end
+        @index += 1
+        return @tockens[@index-1]
+    end
+
+    def expect(char)
+        if @index >= @size
+            raise "Expected #{char} but end of input"
+        end
+        
+        if @tockens[@index] != char
+            raise "Expected #{char} but got #{@tockens[@index]}"
+        end
+    end
+end
+
+
+
+
 
 
 # PUBLIC METHODS
